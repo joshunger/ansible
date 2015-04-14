@@ -1,0 +1,22 @@
+---
+- homebrew: name=packer state=present
+  when: ansible_os_family == 'Darwin'
+
+- apt: name=packer state=present
+  when: ansible_os_family == 'Debian'
+
+- file: path=~/.bash_profile state=touch
+- lineinfile: dest=~/.bash_profile line="export GOPATH=$HOME/go"
+- lineinfile: dest=~/.bash_profile line="export PATH=$PATH:$GOPATH/bin"
+- file: path=~/go/bin state=directory
+#- command: export PATH=$PATH:$GOPATH/bin && go get github.com/lmars/packer-post-processor-vagrant-s3
+- command: go get github.com/lmars/packer-post-processor-vagrant-s3
+- file: path=~/.packer.d/plugins state=directory
+- command: cp ~/go/bin/packer-post-processor-vagrant-s3 ~/.packer.d/plugins
+
+#go get github.com/lmars/packer-post-processor-vagrant-s3
+#Copy the plugin into packer.d directory:
+#
+#$ mkdir $HOME/.packer.d/plugins
+#$ cp $GOPATH/bin/packer-post-processor-vagrant-s3 $HOME/.packer.d/plugins
+

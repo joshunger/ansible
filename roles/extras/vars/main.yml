@@ -1,0 +1,28 @@
+
+common_packages: []
+
+homebrew_installed_packages:
+  - android-sdk
+  - go
+  - mercurial
+  - packer
+
+homebrew_taps:
+  - caskroom/cask
+  - homebrew/binary
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - android-studio
+  - boot2docker
+  - dropbox
+  - evernote
+  - firefox
+  - iterm2
+  - java
+  - kindle
+  - spotify
+  - transmission
+#  - vagrant
+#  - vagrant-manager
+#  - virtualbox

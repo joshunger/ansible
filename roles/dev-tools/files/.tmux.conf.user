@@ -1,0 +1,11 @@
+unbind C-b
+set -g prefix `
+bind '~' send-prefix
+bind-key ` last-window
+unbind p
+bind p paste-buffer
+
+#splitting
+bind | split-window -h
+bind = split-window -v
+

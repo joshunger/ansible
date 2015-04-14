@@ -1,0 +1,7 @@
+---
+- name: Create database user for project
+  mysql_user: name={{ database_username }} password={{ database_password }} host=% priv=*.*:ALL state=present
+
+- name: Create project databases
+  mysql_db: name={{ item }} state=present
+  with_items: mysql_databases

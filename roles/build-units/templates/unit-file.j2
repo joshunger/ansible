@@ -1,0 +1,25 @@
+# template: {{ item.key }}
+[Unit]
+Description={{ item.value.description }}
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+
+# NOTE: Environment vars defined here do NOT get passed to the docker image being run
+Environment="IMAGE=no-op"
+
+ExecStartPre=-/usr/bin/docker kill {{ item.key }}
+ExecStartPre=-/usr/bin/docker rm {{ item.key }}
+ExecStartPre=/usr/bin/docker pull {{ item.value.docker_image }}
+# NOTE: The order of parameters passed to docker run is important (the last one is the image to run)
+
+ExecStart=/usr/bin/docker run --name {{ item.key }} -p {{ item.value.port_map }}:{{ item.value.port_map }} \
+{% for key, value in item.value.docker_vars.iteritems() %}
+  -e {{ key }}={{ value }} \
+{% endfor %}
+  {{ item.value.docker_image }}:{{ item.value.docker_tag }}
+
+ExecStartPost=/usr/bin/etcdctl set /apps/ship/database/host $COREOS_PRIVATE_IPV4

@@ -1,0 +1,21 @@
+---
+- name: Submit (or display) unit files NOT loaded 
+  #debug: msg="{{ item.item }}"
+  command: "fleetctl submit {{ item.item.path }}"
+  connection: local
+  environment: fleetctl
+  when: item | failed
+  with_items: listed_unit_files.results
+  when: type == 'start'
+
+
+- name: Start (or display) NOT loaded units
+  #debug: msg="{{ item.item }}"
+  command: "fleetctl start {{ item.item }}"
+  connection: local
+  environment: fleetctl
+  when: item | failed
+  with_items: listed_units.results
+  when: type == 'start'
+
+

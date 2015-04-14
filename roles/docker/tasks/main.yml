@@ -1,0 +1,40 @@
+---
+- name: install packages (Debian)
+  apt: name={{ item }} state=present
+  with_items:
+     - python-pip
+     - docker.io
+  sudo: yes
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Install docker-compose
+  pip: name=docker-compose
+  sudo: yes
+
+- name: Get source for docker-enter
+  get_url: url=https://raw.githubusercontent.com/Pithikos/docker-enter/master/docker-enter.c dest=/usr/local/src/docker-enter.c
+  sudo: yes
+
+- name: Compile docker-enter
+  command: gcc docker-enter.c -o /usr/local/bin/docker-enter
+  args:
+    chdir: /usr/local/src
+    creates: /usr/local/bin/docker-enter
+  sudo: yes
+
+- name: Set premissions on docker-enter
+  file: path=/usr/local/bin/docker-enter mode=755
+  sudo: yes
+
+- name: Adding user {{ ansible_ssh_user }} to docker group
+  user: name={{ ansible_ssh_user }} groups=docker append=yes
+  sudo: yes
+
+#- name: Get latest docker binary
+#  get_url: url=https://get.docker.com/builds/Linux/x86_64/docker-latest dest=/usr/local/sbin/docker
+#  sudo: yes
+#
+#- name: Set premissions
+#  file: path=/usr/local/sbin/docker mode=755
+#  sudo: yes
+

@@ -1,0 +1,35 @@
+---
+# Apply common configuration to all hosts
+- hosts: all
+  gather_facts: no
+  roles: []
+
+- hosts: local
+  roles:
+  - common
+  - extras
+  - fleet
+  - packer
+  - vagrant
+
+- hosts: developers
+  roles:
+  - common
+  - dev-tools
+  - docker
+
+- hosts: coreos
+  gather_facts: no
+  roles:
+  - defunctzombie.coreos-bootstrap
+
+- hosts: coreos
+  roles:
+  - coreos
+
+- hosts: rds-test
+  roles:
+  - common
+  - mysql
+
+

@@ -1,0 +1,19 @@
+---
+- name: "delete {{ vpc_sg_name }}_database"
+  local_action:
+    module: ec2_group
+    region: "{{ aws_region }}"
+    vpc_id: "{{ vpc_id }}"
+    name: "{{ vpc_sg_name }}_database"
+    description: security group for databases
+    state: absent
+
+- name: "delete {{ vpc_sg_name }}_cluster"
+  local_action:
+    module: ec2_group
+    region: "{{ aws_region }}"
+    vpc_id: "{{ vpc_id }}"
+    name: "{{ vpc_sg_name }}_cluster"
+    description: security group for cluster nodes
+    state: absent
+

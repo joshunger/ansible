@@ -1,0 +1,7 @@
+
+- name: copy environment (OSX)
+  copy: src={{item}} dest=/Users/{{env.user}}/{{item}} owner={{env.user}} group=staff mode=0644
+  with_items:
+    - '.inputrc'
+    - '.tmux.conf'
+

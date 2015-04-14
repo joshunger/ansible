@@ -1,0 +1,17 @@
+---
+- name: Copy user-data to node cloud-config
+  copy: src="{{ user_data_file }}" dest=/var/lib/coreos-vagrant/vagrantfile-user-data
+  sudo: yes
+  register: user_data_copy
+
+- name: restart machine
+  command: shutdown -r now "Ansible updates triggered"
+  sudo: yes
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: user_data_copy.changed == true
+
+- name: wait for server
+  local_action: wait_for port={{ ansible_ssh_port }} delay=20 host="{{ ansible_ssh_host | default(inventory_hostname) }}"
+  when: user_data_copy.changed == true

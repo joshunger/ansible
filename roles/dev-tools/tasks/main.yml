@@ -1,0 +1,22 @@
+---
+#- include: setup-mac.yml
+#  when: ansible_os_family == 'Darwin'
+
+#- include: setup-debian.yml
+#  when: ansible_os_family == 'Debian'
+
+- include: yadr.yml
+
+- name: install base packages (Debian)
+  apt: name={{ item }} state=present
+  with_items: packages
+  sudo: true
+  when: ansible_pkg_mgr == 'apt'
+
+- name: install developer packages (Debian)
+  apt: name={{ item }} state=present
+  with_items: developer_packages
+  sudo: yes
+  when: ansible_pkg_mgr == 'apt'
+
+- include: nodejs.yml

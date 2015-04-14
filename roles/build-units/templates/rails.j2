@@ -1,0 +1,38 @@
+[Unit]
+Description={{ item.description }}
+
+# Requirements
+Requires=etcd.service
+Requires=docker.service
+Requires={{ item.name }}-discovery@%i.service
+
+# Dependency Ordering
+After=etcd.service
+After=docker.service
+Before={{ item.name }}-discovery@%i.service
+
+
+[Service]
+TimeoutStartSec=0
+KillMode=none
+EnvironmentFile=/etc/environment
+EnvironmentFile=/etc/systemd/{{ item.name }}.conf
+
+ExecStartPre=-/usr/bin/docker kill {{ item.name }}.%i
+ExecStartPre=-/usr/bin/docker rm {{ item.name }}.%i
+ExecStartPre=/usr/bin/docker pull {{ item.docker_image }}
+
+# NOTE: The order of parameters passed to docker run is important (the last one is the image to run)
+# host port / container port
+
+ExecStart=/usr/bin/sh -c '/usr/bin/docker run --name {{ item.name }}.%i -p ${COREOS_PRIVATE_IPV4}:%i:{{ item.expose_port }} \
+{% for item in item.vars %}
+  -e {{ item.name }}=${{ item.name }} \
+{% endfor %}
+  {{ item.docker_image }}:{{ item.docker_tag }}'
+
+ExecStop=/usr/bin/docker stop {{ item.name }}.%i
+
+
+[X-Fleet]
+Conflicts={{ item.name }}@*.service

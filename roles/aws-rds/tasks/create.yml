@@ -1,0 +1,50 @@
+---
+- name: Create Multi-AZ DB subnet group
+  connection: local
+  rds_subnet_group:
+    name: "{{ item.name }}"
+    state: present
+    region: "{{ item.region }}"
+    description: "{{ item.description }}"
+    subnets: "{{ item.subnets }}"
+  with_items: aws_rds_subnet_group
+
+- name: Create mysql parameter group
+  connection: local
+  rds_param_group:
+    name: "{{ item.name }}"
+    state: present
+    region: "{{ item.region }}"
+    description: "{{ item.description }}"
+    engine: "{{ item.engine }}"
+    params: "{{ item.params }}"
+  with_items: aws_rds_param_group
+
+- name: Create mysql RDS instance
+  connection: local
+  rds:
+    command: create
+    instance_name: "{{ item.instance_name }}"
+    region: "{{ item.region }}"
+    size: "{{ item.size }}"
+    instance_type: "{{ item.instance_type }}"
+    db_engine: "{{ item.db_engine }}"
+    engine_version: "{{ item.engine_version }}"
+    subnet: "{{ item.subnet }}"
+    parameter_group: "{{ item.parameter_group }}"
+    multi_zone: "{{ item.multi_zone }}"
+    wait: "{{ item.wait }}"
+    db_name: "{{ item.db_name }}"
+    username: "{{ item.username }}"
+    password: "{{ item.password }}"
+    vpc_security_groups: "{{ item.vpc_security_groups }}"
+#    iops: "{{ item.iops }}"
+  with_items: aws_rds
+  register: aws_cache_rds
+
+#  tags:
+#    Environment: testing
+#    Application: cms
+#    backup_retention: 0  # no backups
+
+

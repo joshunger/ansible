@@ -1,0 +1,34 @@
+---
+- name: Stop the unit
+  #debug: msg="{{ item.item }}"
+  command: "fleetctl stop {{ item.item }}"
+  connection: local
+  environment: fleetctl
+  when: item | success
+  with_items: listed_units.results
+  ignore_errors: true
+  when: type == 'stop'
+
+- name: Unload the unit
+  #debug: msg="{{ item.item }}"
+  command: "fleetctl unload {{ item.item }}"
+  connection: local
+  environment: fleetctl
+  when: item | success
+  with_items: listed_units.results
+  ignore_errors: true
+  when: type == 'stop'
+
+- name: Destroy (or display) unit files NOT loaded 
+  command: "fleetctl destroy {{ item.name }}"
+  connection: local
+  environment: fleetctl
+  with_items: fleet_unit_files
+  when: type == 'stop'
+
+- name: Destroy (or display) unit files NOT loaded 
+  command: "fleetctl destroy {{ item }}"
+  connection: local
+  environment: fleetctl
+  with_items: fleet_units
+  when: type == 'stop'

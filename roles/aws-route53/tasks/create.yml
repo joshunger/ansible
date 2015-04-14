@@ -1,0 +1,12 @@
+---
+- name: create record
+  connection: local
+  route53:
+    command: create
+    zone: yankurniawan.com.
+    record: yankurniawan.com.
+    type: A
+    ttl: 7200
+    overwrite: yes
+    # Public IP address of wordpress server from chapter 4
+    value: 54.79.34.239

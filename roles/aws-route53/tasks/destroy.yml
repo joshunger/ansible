@@ -1,0 +1,9 @@
+---
+- name: delete record
+  connection: local
+  route53:
+    command: delete
+    zone: yankurniawan.com.
+    record: yankurniawan.com.
+    type: A
+    value: 54.79.34.239

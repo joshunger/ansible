@@ -1,0 +1,22 @@
+---
+- name: Check if user-data for cloud-config is needed
+  connection: local
+  stat: path="{{ user_data_file }}"
+  register: user_data
+
+- name: Get new etcd URL for user-data
+  connection: local
+  command: curl -s -w "\n" https://discovery.etcd.io/new
+  register: discovery_url
+  when: not user_data.stat.exists
+
+- name: display discovery url
+  debug: msg="Creating new cloud-config with discovery url {{ discovery_url.stdout }}"
+  when: not user_data.stat.exists
+
+- name: create cloud-config
+  connection: local
+  template:
+    src: user-data.j2
+    dest: "{{ user_data_file }}"
+  when: not user_data.stat.exists

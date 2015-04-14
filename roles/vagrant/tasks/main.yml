@@ -1,0 +1,18 @@
+---
+- name: include env vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: install vagrant and related packages
+  homebrew_cask: name={{ item }} state=present
+  with_items: homebrew_cask_apps
+  when: ansible_os_family == 'Darwin'
+
+- name: Add shell aliases
+  lineinfile: dest=~/.bash_profile line="{{ item }}"
+  with_items:
+    - "alias v='vagrant'"
+    - "alias vd='vagrant destroy'"
+    - "alias vh='vagrant halt'"
+    - "alias vp='vagrant provision'"
+    - "alias vs='vagrant ssh'"
+    - "alias vu='vagrant up'"

@@ -1,0 +1,21 @@
+---
+- name: Delete DB subnet group
+  connection: local
+  rds_subnet_group:
+    name: dbsg2
+    state: absent
+    region: "{{ region }}"
+
+- name: Delete mysql parameter group
+  connection: local
+  rds_param_group:
+    name: mysqlpg1
+    state: absent
+    region: "{{ region }}"
+
+- name: Delete mysql RDS instance
+  connection: local
+  rds:
+    command: delete
+    region: "{{ region }}"
+    instance_name: staging-mysql-1

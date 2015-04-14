@@ -1,0 +1,23 @@
+---
+- name: Download git repos
+  git: repo={{ item.repo }}.git dest={{ item.project_dir }} accept_hostkey=yes update=no
+  with_items: git_repos
+
+- name: Check for project dotenv file
+  stat: path="{{ item.project_dir }}/.env"
+  register: dotenv_files
+  with_items: dotenv
+
+- name: Create base .env file for project
+#  debug: var=item
+  template: src=dotenv.j2 dest="{{ item.item.project_dir }}/.env"
+  when: item.stat.exists == false
+  with_items: dotenv_files.results
+
+#- command: bash -lc 'bundle install'
+#  args:
+#    chdir: "{{ item.project_dir }}"
+#
+#- command: bash -lc 'bundle exec rake db:migrate'
+#  args:
+#    chdir: "{{ item.project_dir }}"

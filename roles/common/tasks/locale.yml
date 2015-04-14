@@ -1,0 +1,25 @@
+---
+- debug: var=locale.timezone
+
+#- name: Set the locale and the time zone
+##  hosts: myhosts
+#  sudo: True
+#  vars:
+#    locale: en_US.UTF-8
+#    timezone: Asia/Singapore
+
+#  tasks:
+#- name: set locale
+#  command: /usr/sbin/update-locale LANG={{locale}} LC_ALL={{locale}}
+#  sudo: true
+- name: set /etc/localtime
+  file: src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime state=link
+  sudo: true
+- name: set /etc/timezone
+  template: src=templates/etc/timezone dest=/etc/timezone
+  notify: update tzdata
+
+#  handlers:
+- name: update tzdata
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
+

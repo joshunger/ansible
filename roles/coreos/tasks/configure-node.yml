@@ -1,0 +1,6 @@
+---
+- name: Copy inputrc file
+  copy: src=.inputrc dest=~/.inputrc
+
+- name: Copy bashrc file
+  copy: src=.bashrc dest=~/.bashrc mode=0755

@@ -1,0 +1,35 @@
+---
+- name: fleet stop from changed config
+  command: fleetctl stop {{ item.item.item.fleet }} chdir=/etc/systemd/system
+  when: item.changed and item.item.item.fleet is defined and run_fleet == 'True'
+  with_items: unit_configs.results
+  ignore_errors: yes
+
+- name: fleet start from changed config
+  command: fleetctl start {{ item.item.item.fleet }} chdir=/etc/systemd/system
+  when: item.changed and item.item.item.fleet is defined and run_fleet == 'True'
+  with_items: unit_configs.results
+
+
+- name: fleet stop
+  command: fleetctl stop {{ item.item.fleet }} chdir=/etc/systemd/system
+  when: item.changed and run_fleet == 'True'
+  with_items: unit_services.results
+  ignore_errors: yes
+
+- name: fleet unload
+  command: fleetctl unload {{ item.item.fleet }} chdir=/etc/systemd/system
+  when: item.changed and run_fleet == 'True'
+  with_items: unit_services.results
+  ignore_errors: yes
+
+- name: fleet destroy
+  command: fleetctl destroy {{ item.item.fleet }} chdir=/etc/systemd/system
+  when: item.changed and run_fleet == 'True'
+  with_items: unit_services.results
+  ignore_errors: yes
+
+- name: fleet start
+  command: fleetctl start {{ item.item.fleet }} chdir=/etc/systemd/system
+  when: item.changed and run_fleet == 'True'
+  with_items: unit_services.results

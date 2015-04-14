@@ -1,0 +1,27 @@
+---
+- name: Copy configuration files to cluster nodes
+  copy:
+    src: environments/{{ env }}/configs/{{ item.item.name }}.conf
+    dest: /etc/systemd/{{ item.item.name }}.conf
+  sudo: yes
+  with_items: config_files.results
+  when: item.item is defined
+  register: unit_configs
+  notify:
+    - fleet stop from changed config
+    - fleet start from changed config
+
+
+- name: Copy unit service files to cluster nodes
+  copy:
+    src: environments/{{ env }}/units/{{ item.service_file }}
+    dest: /etc/systemd/system/{{ item.service_file }}
+  sudo: yes
+  with_items: units
+  register: unit_services
+  notify:
+    - fleet stop
+    - fleet unload
+    - fleet destroy
+    - fleet start
+

@@ -1,0 +1,19 @@
+---  
+- name: create security group and rules
+  ec2_group:
+    aws_region: "{{ item.aws_region }}"
+    vpc_id: "{{ item.vpc_id }}"
+    name: "{{ item.name }}"    
+    description: "{{ item.description }}"
+    rules: "{{ item.rules }}"
+    rules_egress: "{{ item.rules_egress }}"
+  with_items: aws_sg
+  register: aws_cache_sg
+
+
+- name: "Write security group ids to {{ vpc_info_file }}"
+  connection: local
+  lineinfile:
+    dest: "{{ vpc_info_file }}"
+    line: "{{ item.item.name }}: {{ item.group_id }}" 
+  with_items: aws_cache_sg.results

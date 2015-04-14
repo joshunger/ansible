@@ -1,0 +1,30 @@
+---
+- include: brew.yml
+  when: ansible_os_family == 'Darwin'
+
+- include: apt.yml
+  when: ansible_os_family == 'Debian'
+
+
+#- hosts: localhost
+#  connection: local
+#  sudo: true
+
+#  vars:
+#    env:
+#      user: rjayroach
+
+#  # See: http://docs.ansible.com/playbooks_conditionals.html
+#  vars_files:
+#    - [ "vars/{{ ansible_os_family }}.yml", "vars/common.yml" ]
+#
+#  roles:
+#    - { role: geerlingguy.homebrew, sudo: false, when: ansible_os_family == 'Darwin' }
+#    #- env
+
+#  tasks: []
+  #  - include: tasks/packer.yml
+  #    sudo: yes
+  #    sudo_user: rjayroach
+  #- name: make sure apache is running
+  #  service: name={{ apache }} state=running

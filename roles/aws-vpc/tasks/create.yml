@@ -1,0 +1,36 @@
+---
+# TODO
+# - support writing more than one vpc id to the file
+# - vpc_info_file should not use a global variable from site.yml
+
+- name: "Create VPC with multi-az subnets"
+  connection: local
+  ec2_vpc:
+    region: "{{ item.aws_region }}"
+    cidr_block: "{{ item.cidr_block }}"
+    resource_tags: '{"Name":"{{ item.name }}"}'
+    subnets: "{{ item.subnets }}"
+    internet_gateway: "{{ item.internet_gateway }}"  #yes
+    route_tables: "{{ item.route_tables }}"
+  register: vpc
+  with_items: aws_vpc
+
+
+- name: "Ensure {{ vpc_info_file }} exists"
+  connection: local
+  file: path={{ vpc_info_file }} state={{ item }}
+  with_items: [ absent, touch ]
+
+- name: "Write vpc id to {{ vpc_info_file }}"
+  connection: local
+  lineinfile:
+    dest: "{{ vpc_info_file }}"
+    line: "vpc_id: {{ vpc.results[0].vpc_id }}" 
+
+- name: "Write subnets id to {{ vpc_info_file }}"
+  connection: local
+  lineinfile:
+    dest: "{{ vpc_info_file }}"
+    line: "{{ item.resource_tags.Name }}: {{ item.id }}" 
+  with_items: vpc.results[0].subnets
+

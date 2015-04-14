@@ -1,0 +1,15 @@
+---
+- include: create-cloud-config.yml
+
+#- debug: var=copy_cloud_config
+#- debug: var=configure_node
+
+- include: copy-cloud-config.yml
+  when: copy_cloud_config == 'True'
+
+- include: configure-node.yml
+  when: configure_node == 'True'
+
+#- name: Fleet managed services
+#  include: fleetctl.yml
+

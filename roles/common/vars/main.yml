@@ -1,0 +1,14 @@
+
+common_packages:
+  - tree
+  - tmux
+  - wget
+
+homebrew_install_path: /usr/local
+homebrew_installed_packages:
+  - brew-cask
+
+homebrew_taps: []
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps: []

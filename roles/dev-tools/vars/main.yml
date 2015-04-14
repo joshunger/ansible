@@ -1,0 +1,17 @@
+---
+packages:
+  - tree
+  - tmux
+  - tcpdump
+  - vim
+  - git
+  - htop
+  - rake
+
+developer_packages:
+  - libmysqlclient-dev
+  - libsqlite3-dev
+  - mysql-client
+  - mysql-server
+  - python-mysqldb
+  - ruby-dev

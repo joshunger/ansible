@@ -1,0 +1,19 @@
+---
+- name: Destroy key pairs
+  connection: local
+  ec2_key:
+    region: "{{ item.aws_region }}"
+    name: "{{ item.name }}"
+    state: absent
+  register: keys
+  with_items: key_pairs
+
+- debug: var=keys
+
+- name: Remove the private key file
+  connection: local
+  file:
+    path: "~/.ssh/{{ item.item.name }}.pem"
+    state: absent
+  with_items: keys.results
+  when: item | changed

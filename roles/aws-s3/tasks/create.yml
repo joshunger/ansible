@@ -1,0 +1,40 @@
+---
+- name: create an S3 bucket
+  connection: local
+  s3:
+    bucket: "{{ bucketname }}"
+    mode: create
+
+- name: create a virtual directory
+  connection: local
+  s3:
+    bucket: "{{ bucketname }}"
+    object: /backup/database/
+    mode: create
+
+- name: upload file
+  connection: local
+  s3:
+    bucket: "{{ bucketname }}"
+    object: /backup/database/test.txt
+    src: test.txt
+    overwrite: false
+    mode: put
+
+- name: share file
+  connection: local
+  s3:
+    bucket: "{{ bucketname }}"
+    object: /backup/database/test.txt
+    expiration: 3600
+    mode: geturl
+
+- name: download file
+  connection: local
+  s3:
+  bucket: "{{ bucketname }}"
+  object: /backup/database/test.txt
+  dest: test1.txt
+  overwrite=True  # default: True
+  mode: get
+

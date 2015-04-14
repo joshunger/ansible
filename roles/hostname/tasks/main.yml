@@ -1,0 +1,9 @@
+---
+- name: Change host name
+  hostname: name={{ host_name_base }}-{{ host_type }}
+  sudo: yes
+
+- name: Update host name in /etc/hosts
+  lineinfile: dest=/etc/hosts regexp='^127\.0\.1\.1' line='127.0.1.1       {{ host_name_base }}-{{ host_type }}.dev {{ host_name_base }}-{{ host_type }}'
+  sudo: yes
+

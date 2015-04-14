@@ -1,0 +1,27 @@
+---
+- name: create ~/src and ~/bin directories
+  file: path=~/{{ item }} state=directory
+  with_items:
+    - src
+    - bin
+
+- name: get nodejs
+  get_url: url=http://nodejs.org/dist/v0.12.1/node-v0.12.1-linux-x64.tar.gz dest="~/src/node-v0.12.1-linux-x64.tar.gz"
+  register: new_archive
+
+- name: install nodesjs
+  unarchive: src="~/src/node-v0.12.1-linux-x64.tar.gz" dest="~/src" copy=no
+  when: new_archive|changed
+
+- name: create file for zsh path
+  file: path="~/.yadr/zsh/path.zsh" state=touch
+
+- name: add nodejs to zsh path
+  lineinfile: dest="~/.yadr/zsh/path.zsh" line='export PATH=$PATH:~/src/node-v0.12.1-linux-x64/bin'
+
+- name: install cordova
+  command: ~/src/node-v0.12.1-linux-x64/bin/npm install -g cordova
+  args:
+     warn: false
+     creates: ~/src/node-v0.12.1-linux-x64/bin/cordova
+

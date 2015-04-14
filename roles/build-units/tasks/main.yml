@@ -1,0 +1,38 @@
+---
+- name: Create configs directory
+  file: path="environments/{{ platform_environment }}/configs" state=directory
+  connection: local
+
+- name: Create units directory
+  file: path="environments/{{ platform_environment }}/units" state=directory
+  connection: local
+
+
+- name: Create config file <unit name>.conf (for /etc/system)
+  connection: local
+  template:
+    src: "{{ item.config_template }}.j2"
+    dest: "./environments/{{ env }}/configs/{{ item.name }}.conf"
+  with_items: units
+  when: item.config_template is defined
+  register: config_files
+
+
+- name: Copy <unit name>.service (for /etc/systemd/system)
+  connection: local
+  copy:
+    src: "{{ item.service_file }}"
+    dest: "./environments/{{ env }}/units/{{ item.service_file }}"
+  with_items: units
+  when: item.unit_template is not defined
+
+
+- name: Create <unit name>.service (for /etc/systemd/system)
+  connection: local
+  template:
+    src: "{{ item.unit_template }}.j2"
+    dest: "./environments/{{ env }}/units/{{ item.service_file }}"
+  with_items: units
+  when: item.unit_template is defined
+
+- include: fleetctl.yml

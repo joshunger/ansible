@@ -1,0 +1,17 @@
+---
+- name: Create key pairs
+  connection: local
+  ec2_key:
+    region: "{{ item.aws_region }}"
+    name: "{{ item.name }}"
+    state: present
+  register: keys
+  with_items: key_pairs
+
+
+- name: Write the private key to a file
+  local_action: shell echo -e "{{ item.key.private_key }}"
+                  > ~/.ssh/"{{ item.key.name }}".pem &&
+                  chmod 600 ~/.ssh/"{{ item.key.name }}".pem
+  with_items: keys.results
+  when: item.key.private_key is defined

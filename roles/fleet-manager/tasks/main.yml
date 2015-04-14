@@ -1,0 +1,36 @@
+---
+- name: Use tunnel for fleetctl
+  debug: msg="export FLEETCTL_TUNNEL={{ fleetctl['FLEETCTL_TUNNEL'] }}"
+
+- name: List unit files in the Fleet
+  command: bash -c "fleetctl list-unit-files | grep {{ item.name }}"
+  connection: local
+  environment: fleetctl
+  register: listed_unit_files
+  ignore_errors: true
+  with_items: fleet_unit_files
+
+#- name: Display loaded unit files
+#  debug: msg="{{ item.item }}"
+#  when: item | success
+#  with_items: listed_unit_files.results
+
+- name: List units in the Fleet
+  command: bash -c "fleetctl list-units | grep {{ item }}"
+  connection: local
+  environment: fleetctl
+  register: listed_units
+  ignore_errors: true
+  with_items: fleet_units
+
+#- name: Display loaded units
+#  debug: msg="{{ item.item }}"
+#  when: item | success
+#  with_items: listed_units.results
+
+- include: fleet_start.yml
+  when: type == 'start'
+
+- include: fleet_stop.yml
+  when: type == 'stop'
+

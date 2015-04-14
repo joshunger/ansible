@@ -1,0 +1,9 @@
+---
+- name: Destroy vpc
+  local_action:
+    resource_tags: '{"Name":"{{ vpc_name }}"}'
+    module: ec2_vpc
+    region: "{{ aws_region }}"
+    state: absent
+    vpc_id: "{{ vpc_id }}"
+    wait: yes

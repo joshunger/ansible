@@ -1,0 +1,6 @@
+---
+- name: delete an S3 bucket and all of its contents
+  connection: local
+  s3:
+    bucket: "{{ bucketname }}"
+    mode: delete

@@ -1,0 +1,32 @@
+---
+homebrew_install_path: /usr/local
+homebrew_installed_packages:
+  - android-sdk
+  - brew-cask
+  - fleetctl
+  - go
+  - mercurial
+  - packer
+  - tree
+  - tmux
+  - wget
+
+homebrew_taps:
+  - caskroom/cask
+  - homebrew/binary
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - android-studio
+  - boot2docker
+  - dropbox
+  - evernote
+  - firefox
+  - iterm2
+  - java
+  - kindle
+  - spotify
+  - transmission
+  - vagrant
+  - vagrant-manager
+  - virtualbox

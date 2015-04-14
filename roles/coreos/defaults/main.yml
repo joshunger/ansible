@@ -1,0 +1,9 @@
+---
+user_data_dir: './user-datas'
+
+# Do not copy files to coreOS node unless specifically requested
+configure_node: 'False'
+
+# Do not copy cloud-config to coreOS node
+# (not appropriate for AWS, but is for Vagrant coreOS nodes)
+copy_cloud_config: 'False'
