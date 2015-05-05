@@ -27,11 +27,11 @@
 - name: Remove bogus line from .vimrc
   lineinfile: dest=~/.vimrc state=absent regexp="^set list listchars"
 
-- lineinfile: dest=~/.zprofile line={{item}}
-  with_items:
-    - "export LC_CTYPE='en_US.UTF-8'"
-    - "export LANG='en_US.UTF-8'"
-    - "export LANGUAGE='en_US.UTF-8'"
+- lineinfile: dest=~/.zprofile line="export LC_CTYPE='en_US.UTF-8'"
+  when: ansible_distribution == 'Debian'
+- lineinfile: dest=~/.zprofile line="export LANG='en_US.UTF-8'"
+  when: ansible_distribution == 'Debian'
+- lineinfile: dest=~/.zprofile line="export LANGUAGE='en_US.UTF-8'"
   when: ansible_distribution == 'Debian'
 
 - name: copy files to home directory

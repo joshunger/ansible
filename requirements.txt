@@ -1,3 +1,2 @@
-#geerlingguy.homebrew
 zzet.rbenv
 defunctzombie.coreos-bootstrap
