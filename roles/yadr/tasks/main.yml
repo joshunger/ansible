@@ -7,26 +7,43 @@
   sudo: true
   when: ansible_pkg_mgr == 'apt'
 
+- name: Check if YADR is installed
+  stat: path=~/.yadr
+  register: yadr_dir
+
 - name: download YADR
   get_url: url=https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh dest=/tmp/yadr_install.sh mode=0755
+  when: yadr_dir.stat.exists == false
 
 - name: install YADR
-  command: bash -c 'echo yes | /tmp/yadr_install.sh' creates=~/.yadr
+  command: bash -c 'echo yes | /tmp/yadr_install.sh' #creates=~/.yadr
+  when: yadr_dir.stat.exists == false
 
 - name: Set the user shell to zsh
   user: name={{ ansible_ssh_user }} shell=/bin/zsh
   sudo: yes
+  when: ansible_distribution == 'Debian'
 
 - name: Remove bogus line from .vimrc
   lineinfile: dest=~/.vimrc state=absent regexp="^set list listchars"
 
-- lineinfile: dest=/etc/environment line='LC_ALL="en_US.ISO-8859-1"'
-  sudo: true
-  when: ansible_distribution == 'Debian' #and ansible_distribution_version == 'jessie/sid'
+- lineinfile: dest=~/.zprofile line={{item}}
+  with_items:
+    - "export LC_CTYPE='en_US.UTF-8'"
+    - "export LANG='en_US.UTF-8'"
+    - "export LANGUAGE='en_US.UTF-8'"
+  when: ansible_distribution == 'Debian'
 
-- name: copy environment (Debian)
+- name: copy files to home directory
   #copy: src={{item}} dest=/home/{{env.user}}/{{item}} owner={{env.user}} group={{env.user}} mode=0644
   copy: src={{item}} dest=~/{{item}} # owner={{env.user}} group={{env.user}} mode=0644
   with_items:
     - '.tmux.conf.user'
     - '.vimrc.before'
+
+- name: customize yadr in .zsh.after
+  copy: src=zsh.after/ dest=~/.zsh.after/ #{{item}}
+  #copy: src={{item}} dest=~/.zsh.after/{{item}}
+  #with_items:
+  #  - 'aliases.zsh'
+  #  - 'path.zsh'

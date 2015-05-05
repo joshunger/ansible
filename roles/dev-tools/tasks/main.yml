@@ -5,8 +5,6 @@
 #- include: setup-debian.yml
 #  when: ansible_os_family == 'Debian'
 
-- include: yadr.yml
-
 - name: install base packages (Debian)
   apt: name={{ item }} state=present
   with_items: packages

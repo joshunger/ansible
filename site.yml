@@ -7,14 +7,16 @@
 - hosts: local
   roles:
   - common
-  - extras
-  - fleet
-  - packer
-  - vagrant
+  - yadr
+#  - extras
+#  - fleet
+#  - packer
+#  - vagrant
 
 - hosts: developers
   roles:
   - common
+  - yadr
   - dev-tools
   - docker
 
