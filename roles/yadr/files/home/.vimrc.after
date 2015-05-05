@@ -21,3 +21,7 @@ map <leader>H :vertical resize -5<cr>
 map <leader>J :resize +5<cr>
 map <leader>K :resize -5<cr>
 map <leader>L :vertical resize +5<cr>
+
+" When a Rails project uses exuberant-ctags and has a gems.tags file in the
+" project root then automatically add it
+set tags+=gems.tags
