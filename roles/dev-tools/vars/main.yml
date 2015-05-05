@@ -9,6 +9,7 @@ packages:
   - rake
 
 developer_packages:
+  - exuberant-ctags
   - libmysqlclient-dev
   - libsqlite3-dev
   - mysql-client
