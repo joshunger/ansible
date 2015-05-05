@@ -35,15 +35,7 @@
   when: ansible_distribution == 'Debian'
 
 - name: copy files to home directory
-  #copy: src={{item}} dest=/home/{{env.user}}/{{item}} owner={{env.user}} group={{env.user}} mode=0644
-  copy: src={{item}} dest=~/{{item}} # owner={{env.user}} group={{env.user}} mode=0644
-  with_items:
-    - '.tmux.conf.user'
-    - '.vimrc.before'
+  copy: src=home/ dest=~/
 
-- name: customize yadr in .zsh.after
-  copy: src=zsh.after/ dest=~/.zsh.after/ #{{item}}
-  #copy: src={{item}} dest=~/.zsh.after/{{item}}
-  #with_items:
-  #  - 'aliases.zsh'
-  #  - 'path.zsh'
+- name: copy files to .zsh.after
+  copy: src=zsh.after/ dest=~/.zsh.after/

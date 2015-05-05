@@ -1,0 +1,23 @@
+set encoding=utf8
+let mapleader = ","
+
+" force yourself to stop using the arrow keys, add this:
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Easy window navigation
+" next line maps Ctrl-h to Ctrl-w plus h for pane navigation
+" map <C-h> <C-w>h
+map <leader>h <C-w>h
+map <leader>j <C-w>j
+map <leader>k <C-w>k
+map <leader>l <C-w>l
+
+" Resize windows
+" See: http://stackoverflow.com/questions/4368690/how-to-increase-the-vertical-split-window-size-in-vim
+map <leader>H :vertical resize -5<cr>
+map <leader>J :resize +5<cr>
+map <leader>K :resize -5<cr>
+map <leader>L :vertical resize +5<cr>

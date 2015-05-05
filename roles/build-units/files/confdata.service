@@ -1,0 +1,13 @@
+[Unit]
+Description=Configuration Data Volume Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+# See: http://blog.dixo.net/2015/02/load-balancing-with-coreos/
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStartPre=-/usr/bin/docker rm conf-data
+ExecStart=/usr/bin/docker run -v /etc/nginx --name conf-data nginx echo "created new data container"
+
