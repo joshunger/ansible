@@ -25,3 +25,8 @@ map <leader>L :vertical resize +5<cr>
 " When a Rails project uses exuberant-ctags and has a gems.tags file in the
 " project root then automatically add it
 set tags+=gems.tags
+
+" Remap code completion to Ctrl+Space
+" inoremap <Nul> <C-n>
+" Remap code completion to Tab
+inoremap <Tab> <C-n>
