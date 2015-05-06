@@ -30,3 +30,6 @@ set tags+=gems.tags
 " inoremap <Nul> <C-n>
 " Remap code completion to Tab
 inoremap <Tab> <C-n>
+
+set pastetoggle=,pp
+map <leader>dd :NERDTreeToggle<CR>
