@@ -17,4 +17,5 @@
   sudo: yes
   when: ansible_pkg_mgr == 'apt'
 
+# NOTE: Postgresql should use ansible or ansible-galaxy roles to setup
 - include: nodejs.yml

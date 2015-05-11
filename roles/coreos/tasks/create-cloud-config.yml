@@ -18,5 +18,6 @@
   connection: local
   template:
     src: user-data.j2
+    #src: user-data-deis-v1.5.2.j2
     dest: "{{ user_data_file }}"
   when: not user_data.stat.exists
